@@ -1,0 +1,4 @@
+{
+  "presets": ["react-app", "@babel/preset-react", "@babel/preset-env"],
+  "plugins": [["emotion", { "autoLabel": true }], "react-hot-loader/babel"]
+}
