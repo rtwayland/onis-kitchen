@@ -6,9 +6,14 @@ const Nav = ({ isAuthenticated, handleLogout }) => {
   return (
     <Navbar>
       {isAuthenticated ? (
-        <button type="button" onClick={handleLogout}>
-          Logout
-        </button>
+        <>
+          <Link to="/recipes/new">
+            <div>New Recipe</div>
+          </Link>
+          <button type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </>
       ) : (
         <>
           <Link to="/signup">

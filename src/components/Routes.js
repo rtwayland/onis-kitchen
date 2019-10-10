@@ -4,6 +4,7 @@ import Login from './Login';
 import AppliedRoute from './AppliedRoute';
 import Home from './Home';
 import Signup from './Signup';
+import NewRecipeForm from './NewRecipe';
 
 const Routes = ({ appProps }) => {
   return (
@@ -15,6 +16,13 @@ const Routes = ({ appProps }) => {
         path="/signup"
         component={Signup}
         appProps={appProps}
+      />
+      <AppliedRoute
+        exact
+        path="/recipes/new"
+        component={NewRecipeForm}
+        appProps={appProps}
+        isProtected
       />
     </Switch>
   );
