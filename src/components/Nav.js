@@ -7,6 +7,9 @@ const Nav = ({ isAuthenticated, handleLogout }) => {
     <Navbar>
       {isAuthenticated ? (
         <>
+          <Link to="/recipes">
+            <div>All Recipes</div>
+          </Link>
           <Link to="/recipes/new">
             <div>New Recipe</div>
           </Link>
