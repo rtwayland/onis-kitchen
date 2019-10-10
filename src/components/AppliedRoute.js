@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route, withRouter } from 'react-router-dom';
 
 const AppliedRoute = ({
-  component,
+  component: Component,
   appProps,
   location,
   isProtected,
@@ -14,7 +14,7 @@ const AppliedRoute = ({
       {...rest}
       render={(props) =>
         isAllowed ? (
-          <component {...props} {...appProps} />
+          <Component {...props} {...appProps} />
         ) : (
           <Redirect
             to={{
