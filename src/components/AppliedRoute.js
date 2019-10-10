@@ -1,6 +1,31 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Redirect, Route, withRouter } from 'react-router-dom';
 
-export default function AppliedRoute({ component: C, appProps, ...rest }) {
-  return <Route {...rest} render={(props) => <C {...props} {...appProps} />} />;
-}
+const AppliedRoute = ({
+  component,
+  appProps,
+  location,
+  isProtected,
+  ...rest
+}) => {
+  const isAllowed = !isProtected || (isProtected && appProps.isAuthenticated);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAllowed ? (
+          <component {...props} {...appProps} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+};
+
+export default withRouter(AppliedRoute);

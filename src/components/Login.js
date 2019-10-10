@@ -3,7 +3,7 @@ import { Button, Form, Message } from 'semantic-ui-react';
 import { Auth } from 'aws-amplify';
 import useFormFields from '../hooks/useFormFields';
 
-const Login = ({ userHasAuthenticated, history }) => {
+const Login = ({ userHasAuthenticated, history, location }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: '',
@@ -22,7 +22,9 @@ const Login = ({ userHasAuthenticated, history }) => {
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
-      history.push('/');
+      const { state } = location;
+      const redirectPath = state && state.from ? state.from : '/';
+      history.push(redirectPath);
     } catch (e) {
       setIsLoading(false);
       setErrorMessage(e.message);
