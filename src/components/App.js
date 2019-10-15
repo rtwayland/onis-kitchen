@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
+import { Container } from 'semantic-ui-react';
 import Nav from './Nav';
 import Routes from './Routes';
 
@@ -32,7 +33,9 @@ const App = ({ history }) => {
     !isAuthenticating && (
       <div>
         <Nav isAuthenticated={isAuthenticated} handleLogout={logout} />
-        <Routes appProps={{ isAuthenticated, userHasAuthenticated }} />
+        <Container>
+          <Routes appProps={{ isAuthenticated, userHasAuthenticated }} />
+        </Container>
       </div>
     )
   );

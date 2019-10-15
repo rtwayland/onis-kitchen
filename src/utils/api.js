@@ -27,7 +27,11 @@ export const getRecipes = async () => {
 
 export const searchRecipes = async (val) => {
   const result = await API.get('recipes', `/recipes/search/${val.trim()}`);
-  const recipes = result.map(({ id, name }) => ({ id, name }));
+  const recipes = result.map(({ id, name, category }) => ({
+    id,
+    name,
+    category,
+  }));
   return recipes;
 };
 

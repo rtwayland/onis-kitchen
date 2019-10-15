@@ -1,46 +1,65 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
-import { refreshRecipes } from '../utils/api';
+import { withRouter } from 'react-router-dom';
+import { Menu } from 'semantic-ui-react';
+// import { refreshRecipes } from '../utils/api';
 
-const Nav = ({ isAuthenticated, handleLogout }) => {
-  return (
-    <Navbar>
-      {isAuthenticated ? (
-        <>
-          <Link to="/">
-            <div>Search Recipes</div>
-          </Link>
-          <button type="button" onClick={() => refreshRecipes()}>
-            Refresh Recipes
-          </button>
-          <Link to="/recipes">
-            <div>All Recipes</div>
-          </Link>
-          <Link to="/new-recipe">
-            <div>New Recipe</div>
-          </Link>
-          <button type="button" onClick={handleLogout}>
-            Logout
-          </button>
-        </>
-      ) : (
-        <>
-          <Link to="/signup">
-            <div>Signup</div>
-          </Link>
-          <Link to="/login">
-            <div>Login</div>
-          </Link>
-        </>
-      )}
-    </Navbar>
+const Nav = ({ isAuthenticated, isAdmin, handleLogout, history, location }) => {
+  const { pathname } = location;
+  const navigate = (path) => history.push(path);
+  return isAuthenticated ? (
+    <NavBar>
+      <Menu secondary>
+        <Menu.Item
+          name="Search"
+          active={pathname === '/'}
+          onClick={() => navigate('/')}
+        />
+        <Menu.Item
+          name="All Recipes"
+          active={pathname === '/recipes'}
+          onClick={() => navigate('/recipes')}
+        />
+        {isAdmin && (
+          <Menu.Item
+            name="Create Recipe"
+            active={pathname === '/new-recipe'}
+            onClick={() => navigate('/new-recipe')}
+          />
+        )}
+        <Menu.Menu position="right">
+          <Menu.Item name="logout" onClick={handleLogout} />
+        </Menu.Menu>
+      </Menu>
+    </NavBar>
+  ) : (
+    <NavBar>
+      <Menu secondary>
+        <Menu.Menu position="right">
+          <Menu.Item
+            name="Sign up"
+            active={pathname === '/signup'}
+            onClick={() => navigate('/signup')}
+          />
+          <Menu.Item
+            name="Login"
+            active={pathname === '/login'}
+            onClick={() => navigate('/login')}
+          />
+        </Menu.Menu>
+      </Menu>
+    </NavBar>
   );
 };
 
-const Navbar = styled.nav({
-  display: 'flex',
-  justifyContent: 'flex-end',
+const NavBar = styled.nav({
+  padding: '5px 10px',
+  borderBottom: '1px solid #ccc',
+  marginBottom: 20,
 });
 
-export default Nav;
+export default withRouter(Nav);
+
+// <button type="button" onClick={() => refreshRecipes()}>
+//   Refresh Recipes
+// </button>

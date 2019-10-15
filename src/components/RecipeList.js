@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion } from 'semantic-ui-react';
+import { Global } from '@emotion/core';
+import { Accordion, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { getRecipes, LocalStorage } from '../utils/api';
@@ -13,13 +14,17 @@ const RecipeList = () => {
       title: section[0],
       content: {
         content: (
-          <ul>
+          <List divided relaxed>
             {section[1].map((item) => (
-              <li key={item.id}>
-                <Link to={`/recipes/${item.id}`}>{item.name}</Link>
-              </li>
+              <List.Item key={item.id}>
+                <List.Content>
+                  <List.Header>
+                    <Link to={`/recipes/${item.id}`}>{item.name}</Link>
+                  </List.Header>
+                </List.Content>
+              </List.Item>
             ))}
-          </ul>
+          </List>
         ),
       },
     }));
@@ -39,10 +44,22 @@ const RecipeList = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Recipes</h1>
-      <Accordion panels={recipes} />
-    </div>
+    <>
+      <Global
+        styles={{
+          '.ui.accordion .title:not(.ui)': {
+            fontSize: 25,
+          },
+          '.ui.accordion .active.content': {
+            paddingLeft: '36px !important',
+          },
+        }}
+      />
+      <div>
+        <h1>Recipes by Category</h1>
+        <Accordion panels={recipes} />
+      </div>
+    </>
   );
 };
 

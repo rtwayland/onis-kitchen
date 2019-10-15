@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import { Input, List } from 'semantic-ui-react';
 import { searchRecipes } from '../utils/api';
 
 const debounceSearch = _.debounce(
@@ -32,19 +33,29 @@ const Home = ({ isAuthenticated }) => {
     <div>
       {isAuthenticated ? (
         <>
-          <input
-            type="text"
+          <Input
+            fluid
+            size="huge"
+            icon="search"
+            iconPosition="left"
             id="search"
+            placeholder="Search..."
             value={searchVal}
             onChange={handleSearch}
           />
-          <ul>
+          <List divided relaxed>
             {list.map((item) => (
-              <li key={item.id}>
-                <Link to={`/recipes/${item.id}`}>{item.name}</Link>
-              </li>
+              <List.Item key={item.id}>
+                <List.Content>
+                  <List.Header>
+                    <Link to={`/recipes/${item.id}`}>{item.name}</Link> —{' '}
+                    {item.category}
+                  </List.Header>
+                  <List.Description>Tags: </List.Description>
+                </List.Content>
+              </List.Item>
             ))}
-          </ul>
+          </List>
         </>
       ) : (
         <div>Welcome to Oni&apos;s Kitchen</div>
