@@ -23,7 +23,7 @@ const Recipe = ({ match }) => {
         const { attachment } = data;
         let attachmentURL;
         if (attachment) {
-          attachmentURL = await Storage.vault.get(attachment);
+          attachmentURL = await Storage.get(attachment);
         }
 
         setRecipe({ ...data, attachmentURL });
