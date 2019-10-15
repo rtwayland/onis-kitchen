@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { API } from 'aws-amplify';
-import { Button, Checkbox, Form, Message, TextArea } from 'semantic-ui-react';
+import { Button, Form, Message } from 'semantic-ui-react';
 import config from '../config';
 import { s3Upload } from '../utils/awsLib';
 
@@ -97,18 +97,6 @@ const NewRecipeForm = () => {
           label="Recipe Category"
           placeholder="Category"
           onChange={({ target }) => setCategory(target.value)}
-        />
-        <TextArea
-          value={notes}
-          id="notes"
-          label="Recipe Notes"
-          placeholder="Notes"
-          onChange={({ target }) => setNotes(target.value)}
-        />
-        <Checkbox
-          label="Favorite"
-          checked={isFavorite}
-          onChange={() => setIsFavorite(!isFavorite)}
         />
         <br />
         <Button
