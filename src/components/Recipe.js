@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { API, Storage } from 'aws-amplify';
+import { LocalStorage } from '../utils/api';
 
 const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
     function loadRecipe() {
-      return API.get('recipes', `/recipes/${match.params.id}`);
+      const recipes = LocalStorage.get('recipesById');
+      if (!recipes) return API.get('recipes', `/recipes/${match.params.id}`);
+      return recipes[match.params.id];
     }
 
     async function onLoad() {
@@ -31,7 +34,7 @@ const Recipe = ({ match }) => {
   return recipe ? (
     <div>
       <h1>{recipe.name}</h1>
-      <h2>{recipe.category}</h2>
+      <h2>{recipe.notes}</h2>
       <ImgContainer>
         <img src={recipe.attachmentURL} alt="recipe" />
       </ImgContainer>

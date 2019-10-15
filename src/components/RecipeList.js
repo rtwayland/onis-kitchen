@@ -1,45 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { API } from 'aws-amplify';
 import _ from 'lodash';
+import { getRecipes, LocalStorage } from '../utils/api';
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
-  useEffect(() => {
-    async function onLoad() {
-      try {
-        const allRecipes = await loadRecipes();
-        const recipesByCategory = _.groupBy(allRecipes, 'category');
-        const categories = Object.entries(recipesByCategory).map((section) => ({
-          key: section[0],
-          title: section[0],
-          content: {
-            content: (
-              <ul>
-                {section[1].map((item) => (
-                  <li key={item.id}>
-                    <Link to={`/recipes/${item.id}`}>{item.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            ),
-          },
-        }));
-        setRecipes(categories);
-      } catch (e) {
-        console.log(e);
-      }
-    }
+  const formatRecipesForList = (array) => {
+    const recipesByCategory = _.groupBy(array, 'category');
+    const categories = Object.entries(recipesByCategory).map((section, i) => ({
+      key: `recipe-list-${i + 1}-${section[0]}`,
+      title: section[0],
+      content: {
+        content: (
+          <ul>
+            {section[1].map((item) => (
+              <li key={item.id}>
+                <Link to={`/recipes/${item.id}`}>{item.name}</Link>
+              </li>
+            ))}
+          </ul>
+        ),
+      },
+    }));
 
-    onLoad();
+    return categories;
+  };
+
+  useEffect(() => {
+    const loadRecipes = async () => {
+      let allRecipes = LocalStorage.get('rawRecipeData');
+      if (!allRecipes) allRecipes = await getRecipes();
+
+      const formattedRecipies = formatRecipesForList(allRecipes);
+      setRecipes(formattedRecipies);
+    };
+    loadRecipes();
   }, []);
 
-  function loadRecipes() {
-    return API.get('recipes', '/recipes');
-  }
   return (
     <div>
+      <h1>Recipes</h1>
       <Accordion panels={recipes} />
     </div>
   );

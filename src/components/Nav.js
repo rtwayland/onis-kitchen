@@ -1,16 +1,23 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import { refreshRecipes } from '../utils/api';
 
 const Nav = ({ isAuthenticated, handleLogout }) => {
   return (
     <Navbar>
       {isAuthenticated ? (
         <>
+          <Link to="/">
+            <div>Search Recipes</div>
+          </Link>
+          <button type="button" onClick={() => refreshRecipes()}>
+            Refresh Recipes
+          </button>
           <Link to="/recipes">
             <div>All Recipes</div>
           </Link>
-          <Link to="/recipes/new">
+          <Link to="/new-recipe">
             <div>New Recipe</div>
           </Link>
           <button type="button" onClick={handleLogout}>

@@ -34,7 +34,7 @@ const Routes = ({ appProps }) => {
       />
       <AppliedRoute
         exact
-        path="/recipes/new"
+        path="/new-recipe"
         component={NewRecipeForm}
         appProps={appProps}
         isProtected
