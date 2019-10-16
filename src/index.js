@@ -27,6 +27,11 @@ Amplify.configure({
         endpoint: apiGateway.URL,
         region: apiGateway.REGION,
       },
+      {
+        name: 'userRecipeData',
+        endpoint: apiGateway.URL,
+        region: apiGateway.REGION,
+      },
     ],
   },
 });

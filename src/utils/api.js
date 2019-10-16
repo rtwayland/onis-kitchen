@@ -1,4 +1,4 @@
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import _ from 'lodash';
 
 export const LocalStorage = {
@@ -33,6 +33,41 @@ export const searchRecipes = async (val) => {
     category,
   }));
   return recipes;
+};
+
+export const getUserRecipeData = async (recipeId) => {
+  try {
+    const { username } = await Auth.currentUserInfo();
+    const id = `${username}_${recipeId}`;
+    const row = await API.get('userRecipeData', `/user-recipe-data/${id}`);
+    return row;
+  } catch (getError) {
+    return {};
+  }
+};
+
+export const createUserRecipeData = async (recipeId, data) => {
+  try {
+    const { username } = await Auth.currentUserInfo();
+    const id = `${username}_${recipeId}`;
+    const body = { ...data, id, userId: username, recipeId };
+    await API.post('userRecipeData', '/user-recipe-data', {
+      body,
+    });
+  } catch (createError) {
+    console.log('CreateError', createError);
+  }
+};
+export const updateUserRecipeData = async (recipeId, data) => {
+  try {
+    const { username } = await Auth.currentUserInfo();
+    const id = `${username}_${recipeId}`;
+    await API.put('userRecipeData', `/user-recipe-data/${id}`, {
+      body: data,
+    });
+  } catch (updateError) {
+    console.log('UpdateError', updateError);
+  }
 };
 
 export const refreshRecipes = () => {
