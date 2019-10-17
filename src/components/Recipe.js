@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Dimmer, /* Label, */ Loader, Icon } from 'semantic-ui-react';
+import { Dimmer, Label, Loader, Icon } from 'semantic-ui-react';
 import { API, Storage } from 'aws-amplify';
 import {
   LocalStorage,
@@ -8,16 +8,16 @@ import {
   createUserRecipeData,
   updateUserRecipeData,
 } from '../utils/api';
-// import TagDropdown from './TagDropdown';
+import TagDropdown from './TagDropdown';
 
 const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
   const [expanded, setExpanded] = useState(false);
   const [isFavorite, setFavorite] = useState(false);
-  // const [tags, setTags] = useState([]);
-  // const [notes, setNotes] = useState([]);
-  // const [isAddingTag, setIsAddingTag] = useState(false);
-  // const userTags = ['one', 'two', 'three', 'fun', 'fox'];
+  const [tags, setTags] = useState([]);
+  const [notes, setNotes] = useState([]);
+  const [isAddingTag, setIsAddingTag] = useState(false);
+  const userTags = ['one', 'two', 'three', 'fun', 'fox'];
 
   useEffect(() => {
     function loadRecipe() {
@@ -30,8 +30,8 @@ const Recipe = ({ match }) => {
       try {
         const data = await getUserRecipeData(match.params.id);
         if (typeof data.isFavorite === 'boolean') setFavorite(data.isFavorite);
-        // if (data.tags) setTags(data.tags);
-        // if (data.notes) setNotes(data.notes);
+        if (data.tags) setTags(data.tags);
+        if (data.notes) setNotes(data.notes);
       } catch (error) {
         await createUserRecipeData(match.params.id, {});
       }
@@ -66,19 +66,19 @@ const Recipe = ({ match }) => {
     }
   };
 
-  // const handleTagDelete = (name) => {
-  //   const filtered = tags.filter((tag) => tag !== name);
-  //   setTags(filtered);
-  // };
+  const handleTagDelete = (name) => {
+    const filtered = tags.filter((tag) => tag !== name);
+    setTags(filtered);
+  };
 
-  // const handleSaveTags = (itemTags, newTags) => {
-  //   setIsAddingTag(false);
-  //   if (itemTags) {
-  //     setTags([...tags, ...itemTags]);
-  //   }
-  //   // Add newTags to master userTags list
-  //   // update User and userRecipeData
-  // };
+  const handleSaveTags = (itemTags, newTags) => {
+    setIsAddingTag(false);
+    if (itemTags) {
+      setTags([...tags, ...itemTags]);
+    }
+    // Add newTags to master userTags list
+    // update User and userRecipeData
+  };
 
   const expandImage = () => setExpanded(!expanded);
 
@@ -105,7 +105,7 @@ const Recipe = ({ match }) => {
         </Expand>
         <img src={recipe.attachmentURL} alt="recipe" />
       </ImgContainer>
-      {/* <HContainer>
+      <HContainer>
         <h2>Tags:</h2>
         <Icon
           name="plus"
@@ -131,7 +131,7 @@ const Recipe = ({ match }) => {
           </Label>
         ))}
       <h2>Notes</h2>
-      {notes.length > 0 && notes.map((note) => <p key={note}>{note}</p>)} */}
+      {notes.length > 0 && notes.map((note) => <p key={note}>{note}</p>)}
     </div>
   ) : (
     <div>
