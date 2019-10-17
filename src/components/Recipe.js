@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import {
-  Button,
-  Dimmer,
-  Label,
-  Loader,
-  Icon,
-  Dropdown,
-} from 'semantic-ui-react';
+import { Dimmer, /* Label, */ Loader, Icon } from 'semantic-ui-react';
 import { API, Storage } from 'aws-amplify';
 import {
   LocalStorage,
@@ -15,22 +8,16 @@ import {
   createUserRecipeData,
   updateUserRecipeData,
 } from '../utils/api';
-
-const createTagOptions = (tags) => {
-  return tags.map((tag) => ({ text: tag, value: tag }));
-};
+// import TagDropdown from './TagDropdown';
 
 const Recipe = ({ match }) => {
-  const [hasUserRecipeData, setHasUserRecipeData] = useState(false);
   const [recipe, setRecipe] = useState(null);
   const [expanded, setExpanded] = useState(false);
   const [isFavorite, setFavorite] = useState(false);
-  const [tags, setTags] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [isAddingTag, setIsAddingTag] = useState(false);
-  const [newTags, setNewTags] = useState([]);
-  const userTags = ['one', 'two', 'three'];
-  const [tagOptions, setTagOptions] = useState(createTagOptions(userTags));
+  // const [tags, setTags] = useState([]);
+  // const [notes, setNotes] = useState([]);
+  // const [isAddingTag, setIsAddingTag] = useState(false);
+  // const userTags = ['one', 'two', 'three', 'fun', 'fox'];
 
   useEffect(() => {
     function loadRecipe() {
@@ -42,12 +29,11 @@ const Recipe = ({ match }) => {
     async function loadUserRecipeData() {
       try {
         const data = await getUserRecipeData(match.params.id);
-        setHasUserRecipeData(true);
-        setFavorite(data.isFavorite);
-        if (data.tags) setTags(data.tags);
-        if (data.notes) setNotes(data.notes);
+        if (typeof data.isFavorite === 'boolean') setFavorite(data.isFavorite);
+        // if (data.tags) setTags(data.tags);
+        // if (data.notes) setNotes(data.notes);
       } catch (error) {
-        setHasUserRecipeData(false);
+        await createUserRecipeData(match.params.id, {});
       }
     }
 
@@ -73,30 +59,26 @@ const Recipe = ({ match }) => {
     const isFav = !isFavorite;
     setFavorite(isFav);
     const data = { isFavorite: isFav };
-    if (hasUserRecipeData) {
-      try {
-        await updateUserRecipeData(match.params.id, data);
-      } catch (updateErr) {
-        console.log(updateErr);
-      }
-    } else {
-      try {
-        await createUserRecipeData(match.params.id, data);
-      } catch (createErr) {
-        console.log(createErr);
-      }
+    try {
+      await updateUserRecipeData(match.params.id, data);
+    } catch (updateErr) {
+      console.log(updateErr);
     }
   };
 
-  const handleTagDelete = (name) => {
-    const filtered = tags.filter((tag) => tag !== name);
-    setTags(filtered);
-  };
+  // const handleTagDelete = (name) => {
+  //   const filtered = tags.filter((tag) => tag !== name);
+  //   setTags(filtered);
+  // };
 
-  const saveNewTags = () => {
-    setIsAddingTag(false);
-    console.log(newTags);
-  };
+  // const handleSaveTags = (itemTags, newTags) => {
+  //   setIsAddingTag(false);
+  //   if (itemTags) {
+  //     setTags([...tags, ...itemTags]);
+  //   }
+  //   // Add newTags to master userTags list
+  //   // update User and userRecipeData
+  // };
 
   const expandImage = () => setExpanded(!expanded);
 
@@ -123,7 +105,7 @@ const Recipe = ({ match }) => {
         </Expand>
         <img src={recipe.attachmentURL} alt="recipe" />
       </ImgContainer>
-      <HContainer>
+      {/* <HContainer>
         <h2>Tags:</h2>
         <Icon
           name="plus"
@@ -134,36 +116,22 @@ const Recipe = ({ match }) => {
         />
       </HContainer>
       {isAddingTag && (
-        <>
-          <Dropdown
-            placeholder="State"
-            multiple
-            search
-            selection
-            allowAdditions
-            onAddItem={(event, data) => {
-              const { value } = data;
-              setTagOptions([...tagOptions, { text: value, value }]);
-            }}
-            onChange={(event, data) => {
-              const { value } = data;
-              setNewTags(value);
-            }}
-            options={tagOptions}
-          />
-          <Button onClick={saveNewTags}>Save</Button>
-        </>
+        <TagDropdown
+          masterTags={userTags}
+          itemTags={tags}
+          onSaveTags={handleSaveTags}
+        />
       )}
       {!isAddingTag &&
-        newTags.length > 0 &&
-        newTags.map((tag) => (
+        tags.length > 0 &&
+        tags.map((tag) => (
           <Label key={tag}>
             {tag}
             <Icon name="delete" onClick={() => handleTagDelete(tag)} />
           </Label>
         ))}
       <h2>Notes</h2>
-      {notes.length > 0 && notes.map((note) => <p key={note}>{note}</p>)}
+      {notes.length > 0 && notes.map((note) => <p key={note}>{note}</p>)} */}
     </div>
   ) : (
     <div>
@@ -200,7 +168,7 @@ const Expand = styled.div({
 
 const ImgContainer = styled.div(
   {
-    width: '95%',
+    width: '100%',
     margin: '0 auto 20px',
     position: 'relative',
     '& img': {
@@ -211,7 +179,6 @@ const ImgContainer = styled.div(
   ({ expanded = false }) =>
     expanded && {
       position: 'absolute',
-      width: '100%',
       top: 0,
       left: 0,
     }
