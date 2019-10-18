@@ -1,17 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { API } from 'aws-amplify';
-import { Button, Form, Message } from 'semantic-ui-react';
-import config from '../config';
+import { Button, Form, Message, List } from 'semantic-ui-react';
 import { s3Upload } from '../utils/awsLib';
 
 const NewRecipeForm = () => {
   const fileInput = useRef(null);
-  const [file, setFile] = useState(null);
-  const [filename, setFilename] = useState('');
+  const [files, setFiles] = useState(null);
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
-  const [notes, setNotes] = useState('');
-  const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -26,19 +22,16 @@ const NewRecipeForm = () => {
   const validateForm = () => name.length > 0 && category.length > 0;
 
   const handleFileChange = (event) => {
-    const newFile = event.target.files[0];
-    setFile(newFile);
-    setFilename(newFile.name);
+    const { files: inputFiles } = event.target;
+    const fileArray = Object.values(inputFiles);
+    setFiles(fileArray);
   };
 
   const reset = () => {
     setIsLoading(false);
     setName('');
     setCategory('');
-    setNotes('');
-    setIsFavorite(false);
-    setFile(null);
-    setFilename('');
+    setFiles(null);
   };
 
   const createRecipe = (recipe) => {
@@ -47,36 +40,31 @@ const NewRecipeForm = () => {
     });
   };
 
+  const handleImages = () => {
+    const images = Promise.all(files.map((file) => s3Upload(file)));
+    return images;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
-      if (file && file.size > config.MAX_ATTACHMENT_SIZE) {
-        setErrorMessage(
-          `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
-            1000000} MB.`
-        );
+      setIsLoading(true);
+      try {
+        const attachments = await handleImages();
+        const recipe = {
+          name,
+          category,
+          attachments,
+        };
+
+        await createRecipe(recipe);
+
+        reset();
+        setShowSuccessMessage(true);
+      } catch (e) {
+        setErrorMessage(e.message);
         setIsLoading(false);
-      } else {
-        setIsLoading(true);
-        try {
-          const attachment = file ? await s3Upload(file) : null;
-          const recipe = {
-            name,
-            category,
-            notes,
-            isFavorite,
-            attachment,
-          };
-
-          await createRecipe(recipe);
-
-          reset();
-          setShowSuccessMessage(true);
-        } catch (e) {
-          setErrorMessage(e.message);
-          setIsLoading(false);
-        }
       }
     }
   };
@@ -101,14 +89,26 @@ const NewRecipeForm = () => {
         <br />
         <Button
           type="button"
-          content="Choose File"
+          content="Choose File(s)"
           labelPosition="left"
           icon="file"
           onClick={() => fileInput.current.click()}
         />
-        <span>{filename}</span>
-        <input ref={fileInput} type="file" hidden onChange={handleFileChange} />
-        <br />
+        <List>
+          {files &&
+            files.map((file, i) => (
+              <List.Item key={file.name}>
+                {i}: {file.name}
+              </List.Item>
+            ))}
+        </List>
+        <input
+          ref={fileInput}
+          type="file"
+          hidden
+          onChange={handleFileChange}
+          multiple
+        />
         <Button type="submit" disabled={!validateForm()}>
           Create
         </Button>

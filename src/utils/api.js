@@ -1,4 +1,4 @@
-import { API, Auth } from 'aws-amplify';
+import { API, Auth, Storage } from 'aws-amplify';
 import _ from 'lodash';
 
 export const LocalStorage = {
@@ -68,6 +68,17 @@ export const updateUserRecipeData = async (recipeId, data) => {
   } catch (updateError) {
     console.log('UpdateError', updateError);
   }
+};
+
+export const getRecipeImages = async (recipeId) => {
+  const { attachments } = await API.get('recipes', `/recipes/${recipeId}`);
+  if (attachments && attachments.length > 0) {
+    const images = Promise.all(
+      attachments.map((filename) => Storage.get(filename))
+    );
+    return images;
+  }
+  return [];
 };
 
 export const refreshRecipes = () => {

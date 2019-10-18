@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Dimmer, Loader, Icon } from 'semantic-ui-react';
-import { API, Storage } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import {
   LocalStorage,
   getUserRecipeData,
   createUserRecipeData,
   updateUserRecipeData,
+  getRecipeImages,
 } from '../utils/api';
+import ImageViewer from './ImageViewer';
 
 const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
-  const [expanded, setExpanded] = useState(false);
   const [isFavorite, setFavorite] = useState(false);
 
   useEffect(() => {
@@ -33,12 +34,9 @@ const Recipe = ({ match }) => {
     async function onLoad() {
       try {
         const data = await loadRecipe();
-        const { attachment } = data;
-        let attachmentURL;
-        if (attachment) {
-          attachmentURL = await Storage.get(attachment);
-        }
-        setRecipe({ ...data, attachmentURL });
+        const images = await getRecipeImages(match.params.id);
+        setRecipe({ ...data, images });
+        return;
       } catch (e) {
         console.log(e);
       }
@@ -59,8 +57,6 @@ const Recipe = ({ match }) => {
     }
   };
 
-  const expandImage = () => setExpanded(!expanded);
-
   return recipe ? (
     <div>
       <HContainer>
@@ -74,16 +70,10 @@ const Recipe = ({ match }) => {
           onClick={handleFavorite}
         />
       </HContainer>
-      <ImgContainer expanded={expanded}>
-        <Expand onClick={expandImage}>
-          <Icon
-            name={expanded ? 'window minimize' : 'expand'}
-            size="huge"
-            inverted
-          />
-        </Expand>
-        <img src={recipe.attachmentURL} alt="recipe" />
-      </ImgContainer>
+      {recipe.images &&
+        recipe.images.map((imageUrl) => (
+          <ImageViewer key={imageUrl} image={imageUrl} />
+        ))}
     </div>
   ) : (
     <div>
@@ -110,30 +100,5 @@ const Category = styled.div({
   fontSize: 25,
   margin: '0 15px 0 10px',
 });
-
-const Expand = styled.div({
-  position: 'absolute',
-  top: 5,
-  right: 5,
-  cursor: 'pointer',
-});
-
-const ImgContainer = styled.div(
-  {
-    width: '100%',
-    margin: '0 auto 20px',
-    position: 'relative',
-    '& img': {
-      display: 'block',
-      width: '100%',
-    },
-  },
-  ({ expanded = false }) =>
-    expanded && {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-    }
-);
 
 export default Recipe;
