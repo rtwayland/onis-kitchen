@@ -5,8 +5,9 @@ import AppliedRoute from './AppliedRoute';
 import Home from './Home';
 import Signup from './Signup';
 import NewRecipeForm from './NewRecipe';
-import RecipeList from './RecipeList';
 import Recipe from './Recipe';
+import AllRecipes from '../pages/AllRecipes';
+import FavoriteRecipes from '../pages/FavoriteRecipes';
 
 const Routes = ({ appProps }) => {
   return (
@@ -21,8 +22,15 @@ const Routes = ({ appProps }) => {
       />
       <AppliedRoute
         exact
+        path="/favorites"
+        component={FavoriteRecipes}
+        appProps={appProps}
+        isProtected
+      />
+      <AppliedRoute
+        exact
         path="/recipes"
-        component={RecipeList}
+        component={AllRecipes}
         appProps={appProps}
         isProtected
       />

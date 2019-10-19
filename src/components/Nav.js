@@ -4,13 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 // import { refreshRecipes } from '../utils/api';
 
-const Nav = ({
-  isAuthenticated,
-  isAdmin = true,
-  handleLogout,
-  history,
-  location,
-}) => {
+const Nav = ({ isAuthenticated, isAdmin, handleLogout, history, location }) => {
   const { pathname } = location;
   const navigate = (path) => history.push(path);
   return isAuthenticated ? (
@@ -25,6 +19,11 @@ const Nav = ({
           name="All Recipes"
           active={pathname === '/recipes'}
           onClick={() => navigate('/recipes')}
+        />
+        <Menu.Item
+          name="Favorites"
+          active={pathname === '/favorites'}
+          onClick={() => navigate('/favorites')}
         />
         {isAdmin && (
           <Menu.Item

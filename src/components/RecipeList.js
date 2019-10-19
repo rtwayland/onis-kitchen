@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Global } from '@emotion/core';
 import { Accordion, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import { getRecipes, LocalStorage } from '../utils/api';
 
-const RecipeList = () => {
-  const [recipes, setRecipes] = useState([]);
+const RecipeList = ({ recipes }) => {
   const formatRecipesForList = (array) => {
     const recipesByCategory = _.groupBy(array, 'category');
     const categories = Object.entries(recipesByCategory).map((section, i) => ({
@@ -32,17 +30,6 @@ const RecipeList = () => {
     return categories;
   };
 
-  useEffect(() => {
-    const loadRecipes = async () => {
-      let allRecipes = LocalStorage.get('rawRecipeData');
-      if (!allRecipes) allRecipes = await getRecipes();
-
-      const formattedRecipies = formatRecipesForList(allRecipes);
-      setRecipes(formattedRecipies);
-    };
-    loadRecipes();
-  }, []);
-
   return (
     <>
       <Global
@@ -55,10 +42,7 @@ const RecipeList = () => {
           },
         }}
       />
-      <div>
-        <h1>Recipes by Category</h1>
-        <Accordion panels={recipes} />
-      </div>
+      <Accordion exclusive={false} panels={formatRecipesForList(recipes)} />
     </>
   );
 };

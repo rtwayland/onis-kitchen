@@ -35,6 +35,19 @@ export const searchRecipes = async (val) => {
   return recipes;
 };
 
+export const getFavoriteRecipes = async () => {
+  const { username } = await Auth.currentUserInfo();
+  const favorites = await API.get(
+    'userRecipeData',
+    `/user-recipe-data/search/${username}`
+  );
+  const favoriteRecipes = Promise.all(
+    favorites.map((item) => API.get('recipes', `/recipes/${item.recipeId}`))
+  );
+
+  return favoriteRecipes;
+};
+
 export const getUserRecipeData = async (recipeId) => {
   try {
     const { username } = await Auth.currentUserInfo();
