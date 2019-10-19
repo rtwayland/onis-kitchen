@@ -55,7 +55,7 @@ export const createUserRecipeData = async (recipeId, data) => {
       body,
     });
   } catch (createError) {
-    console.log('CreateError', createError);
+    throw Error(createError);
   }
 };
 export const updateUserRecipeData = async (recipeId, data) => {
@@ -66,7 +66,7 @@ export const updateUserRecipeData = async (recipeId, data) => {
       body: data,
     });
   } catch (updateError) {
-    console.log('UpdateError', updateError);
+    throw Error(updateError);
   }
 };
 

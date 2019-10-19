@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Dimmer, Loader, Icon } from 'semantic-ui-react';
+import { Dimmer, Message, Loader, Icon } from 'semantic-ui-react';
 import { API } from 'aws-amplify';
+import _ from 'lodash';
 import {
   LocalStorage,
   getUserRecipeData,
@@ -15,6 +16,7 @@ const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
   const [isFavorite, setFavorite] = useState(false);
   const [currentExpanded, setCurrentExpanded] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     function loadRecipe() {
@@ -26,9 +28,14 @@ const Recipe = ({ match }) => {
     async function loadUserRecipeData() {
       try {
         const data = await getUserRecipeData(match.params.id);
-        if (typeof data.isFavorite === 'boolean') setFavorite(data.isFavorite);
+        if (!_.isEmpty(data)) {
+          if (typeof data.isFavorite === 'boolean')
+            setFavorite(data.isFavorite);
+        } else {
+          await createUserRecipeData(match.params.id, {});
+        }
       } catch (error) {
-        await createUserRecipeData(match.params.id, {});
+        setErrorMessage("Failed to load user's recipe data.");
       }
     }
 
@@ -39,7 +46,7 @@ const Recipe = ({ match }) => {
         setRecipe({ ...data, images });
         return;
       } catch (e) {
-        console.log(e);
+        setErrorMessage('Something went wrong loading the recipe data.');
       }
     }
 
@@ -54,7 +61,7 @@ const Recipe = ({ match }) => {
     try {
       await updateUserRecipeData(match.params.id, data);
     } catch (updateErr) {
-      console.log(updateErr);
+      setErrorMessage('Something went wrong setting the favorite.');
     }
   };
 
@@ -71,6 +78,7 @@ const Recipe = ({ match }) => {
           onClick={handleFavorite}
         />
       </HContainer>
+      {errorMessage && <Message error content={errorMessage} />}
       {recipe.images &&
         recipe.images.map((imageUrl) => (
           <ImageViewer
