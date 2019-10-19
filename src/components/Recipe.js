@@ -14,6 +14,7 @@ import ImageViewer from './ImageViewer';
 const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
   const [isFavorite, setFavorite] = useState(false);
+  const [currentExpanded, setCurrentExpanded] = useState('');
 
   useEffect(() => {
     function loadRecipe() {
@@ -72,7 +73,13 @@ const Recipe = ({ match }) => {
       </HContainer>
       {recipe.images &&
         recipe.images.map((imageUrl) => (
-          <ImageViewer key={imageUrl} image={imageUrl} />
+          <ImageViewer
+            key={imageUrl}
+            image={imageUrl}
+            minimized={currentExpanded && currentExpanded !== imageUrl}
+            onExpand={() => setCurrentExpanded(imageUrl)}
+            onMinimize={() => setCurrentExpanded('')}
+          />
         ))}
     </div>
   ) : (

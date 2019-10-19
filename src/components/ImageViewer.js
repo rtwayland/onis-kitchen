@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import { Icon } from 'semantic-ui-react';
 
-const ImageViewer = ({ image }) => {
+const ImageViewer = ({ image, minimized, onExpand, onMinimize }) => {
+  const viewer = useRef(null);
   const [expanded, setExpanded] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(null);
+
+  const handleExpand = () => {
+    const isExpanded = !expanded;
+    if (!scrollPosition) {
+      setScrollPosition(window.scrollY);
+    }
+    setExpanded(isExpanded);
+    if (isExpanded) {
+      window.scrollTo(0, 0);
+      onExpand();
+    } else {
+      // TODO: This works for all images except the last one
+      //  it seems the scroll happens before the last image has
+      //  retaken its place, so the scroll brings the view to the
+      //  second to last image.
+      window.scrollTo(0, scrollPosition);
+      setScrollPosition(null);
+      onMinimize();
+    }
+  };
+
   return (
-    <ImgContainer key={image} expanded={expanded}>
-      <Expand onClick={() => setExpanded(!expanded)}>
+    <ImgContainer
+      ref={viewer}
+      key={image}
+      expanded={expanded}
+      minimized={minimized}
+    >
+      <Expand onClick={handleExpand}>
         <Icon
           name={expanded ? 'window minimize' : 'expand'}
           size="big"
@@ -46,6 +74,11 @@ const ImgContainer = styled.div(
       top: 0,
       left: 0,
       zIndex: 1,
+    },
+  ({ minimized }) =>
+    minimized && {
+      visibility: 'hidden',
+      // display: 'none',
     }
 );
 
