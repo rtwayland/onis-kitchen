@@ -5,6 +5,7 @@ import Amplify from 'aws-amplify';
 import config from './config';
 import 'semantic-ui-css/semantic.min.css';
 import App from './components/App';
+import GlobalStyles from './GlobalStyles';
 
 const { apiGateway, cognito, s3 } = config;
 
@@ -38,6 +39,7 @@ Amplify.configure({
 
 ReactDOM.render(
   <Router>
+    <GlobalStyles />
     <App />
   </Router>,
   document.getElementById('root')
