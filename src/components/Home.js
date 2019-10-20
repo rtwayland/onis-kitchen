@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Input, List } from 'semantic-ui-react';
@@ -39,7 +40,7 @@ const Home = ({ isAuthenticated }) => {
             icon="search"
             iconPosition="left"
             id="search"
-            placeholder="Search..."
+            placeholder="Search recipe names"
             value={searchVal}
             onChange={handleSearch}
           />
@@ -51,17 +52,32 @@ const Home = ({ isAuthenticated }) => {
                     <Link to={`/recipes/${item.id}`}>{item.name}</Link> —{' '}
                     {item.category}
                   </List.Header>
-                  <List.Description>Tags: </List.Description>
+                  {/* <List.Description>Tags: </List.Description> */}
                 </List.Content>
               </List.Item>
             ))}
           </List>
         </>
       ) : (
-        <div>Welcome to Oni&apos;s Kitchen</div>
+        <Container>
+          <h1 className="handwriting">Welcome to Oni&apos;s Kitchen</h1>
+        </Container>
       )}
     </div>
   );
 };
+
+const Container = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  height: '100%',
+  width: '100%',
+  zIndex: -1,
+  textAlign: 'center',
+});
 
 export default Home;
