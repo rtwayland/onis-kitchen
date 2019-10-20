@@ -11,7 +11,7 @@ export const getRecipes = async () => {
   if (!recipes) {
     try {
       recipes = await API.get('recipes', '/recipes');
-      LocalStorage.set('rawRecipeData', recipes);
+      // LocalStorage.set('rawRecipeData', recipes);
     } catch (e) {
       return [];
     }
@@ -19,7 +19,7 @@ export const getRecipes = async () => {
   let recipesById = LocalStorage.get('recipesById');
   if (!recipesById) {
     recipesById = _.keyBy(recipes, 'id');
-    LocalStorage.set('recipesById', recipesById);
+    // LocalStorage.set('recipesById', recipesById);
   }
 
   return recipes;
@@ -41,11 +41,13 @@ export const getFavoriteRecipes = async () => {
     'userRecipeData',
     `/user-recipe-data/search/${username}`
   );
-  const favoriteRecipes = Promise.all(
-    favorites.map((item) => API.get('recipes', `/recipes/${item.recipeId}`))
-  );
-
-  return favoriteRecipes;
+  if (favorites.length > 0) {
+    const favoriteRecipes = Promise.all(
+      favorites.map((item) => API.get('recipes', `/recipes/${item.recipeId}`))
+    );
+    return favoriteRecipes;
+  }
+  return [];
 };
 
 export const getUserRecipeData = async (recipeId) => {
@@ -75,8 +77,9 @@ export const updateUserRecipeData = async (recipeId, data) => {
   try {
     const { username } = await Auth.currentUserInfo();
     const id = `${username}_${recipeId}`;
+    const body = { ...data, id, userId: username, recipeId };
     await API.put('userRecipeData', `/user-recipe-data/${id}`, {
-      body: data,
+      body,
     });
   } catch (updateError) {
     throw Error(updateError);
