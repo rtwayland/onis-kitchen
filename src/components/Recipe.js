@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Dimmer, Message, Loader, Icon } from 'semantic-ui-react';
+import { Message, Icon } from 'semantic-ui-react';
 import { API } from 'aws-amplify';
 import _ from 'lodash';
 import {
   LocalStorage,
   getUserRecipeData,
-  createUserRecipeData,
   updateUserRecipeData,
   getRecipeImages,
 } from '../utils/api';
 import ImageViewer from './ImageViewer';
+import DimmedLoader from './DimmedLoader';
 
 const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
@@ -31,8 +31,6 @@ const Recipe = ({ match }) => {
         if (!_.isEmpty(data)) {
           if (typeof data.isFavorite === 'boolean')
             setFavorite(data.isFavorite);
-        } else {
-          await createUserRecipeData(match.params.id, {});
         }
       } catch (error) {
         setErrorMessage("Failed to load user's recipe data.");
@@ -68,7 +66,7 @@ const Recipe = ({ match }) => {
   return recipe ? (
     <div>
       <HContainer>
-        <h1>{recipe.name}</h1>
+        <h1 className="handwriting">{recipe.name}</h1>
         <Category>— {recipe.category}</Category>
         <Icon
           name={isFavorite ? 'favorite' : 'star outline'}
@@ -91,20 +89,13 @@ const Recipe = ({ match }) => {
         ))}
     </div>
   ) : (
-    <div>
-      <Dimmer.Dimmable dimmed>
-        <Dimmer active inverted>
-          <Loader inverted content="Loading" />
-        </Dimmer>
-        <h1>Recipe</h1>
-      </Dimmer.Dimmable>
-    </div>
+    <DimmedLoader loadingText="Loading" />
   );
 };
 
 const HContainer = styled.div({
   display: 'flex',
-  alignItems: 'center',
+  // alignItems: 'center',
   marginBottom: 20,
   '& h1, & h2': {
     margin: 0,
@@ -113,7 +104,7 @@ const HContainer = styled.div({
 
 const Category = styled.div({
   fontSize: 25,
-  margin: '0 15px 0 10px',
+  margin: '5px 15px 0 10px',
 });
 
 export default Recipe;
