@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getRecipes, LocalStorage } from '../utils/api';
 import RecipeList from '../components/RecipeList';
+import DimmedLoader from '../components/DimmedLoader';
 
 const AllRecipes = () => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState(null);
 
   useEffect(() => {
     const loadRecipes = async () => {
@@ -17,8 +18,10 @@ const AllRecipes = () => {
 
   return (
     <div>
-      <h1>Recipes by Category</h1>
-      <RecipeList recipes={recipes} />
+      <h1 className="handwriting">Recipes by Category</h1>
+      <DimmedLoader loadingText="Loading recipes" isActive={!recipes}>
+        <RecipeList recipes={recipes} />
+      </DimmedLoader>
     </div>
   );
 };
