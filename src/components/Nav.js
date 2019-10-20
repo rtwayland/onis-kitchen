@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 // import { refreshRecipes } from '../utils/api';
 
@@ -10,6 +10,9 @@ const Nav = ({ isAuthenticated, isAdmin, handleLogout, history, location }) => {
   return isAuthenticated ? (
     <NavBar>
       <Menu secondary>
+        <HomeLink className="handwriting" to="/">
+          Oni&apos;s Kitchen
+        </HomeLink>
         <Menu.Item
           name="Search"
           active={pathname === '/'}
@@ -40,6 +43,9 @@ const Nav = ({ isAuthenticated, isAdmin, handleLogout, history, location }) => {
   ) : (
     <NavBar>
       <Menu secondary>
+        <HomeLink className="handwriting" to="/">
+          Oni&apos;s Kitchen
+        </HomeLink>
         <Menu.Menu position="right">
           <Menu.Item
             name="Sign up"
@@ -61,6 +67,15 @@ const NavBar = styled.nav({
   padding: '5px 10px',
   borderBottom: '1px solid #ccc',
   marginBottom: 20,
+});
+
+const HomeLink = styled(Link)({
+  fontSize: 25,
+  margin: '15px 10px 0 10px',
+  color: '#272727',
+  '&:hover': {
+    color: '#272727',
+  },
 });
 
 export default withRouter(Nav);
