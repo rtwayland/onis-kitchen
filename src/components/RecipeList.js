@@ -13,7 +13,7 @@ const RecipeList = ({ recipes }) => {
       content: {
         content: (
           <List divided relaxed>
-            {section[1].map((item) => (
+            {section[1].sort().map((item) => (
               <List.Item key={item.id}>
                 <List.Content>
                   <List.Header>
@@ -36,6 +36,7 @@ const RecipeList = ({ recipes }) => {
         styles={{
           '.ui.accordion .title:not(.ui)': {
             fontSize: 25,
+            fontFamily: '"Homemade Apple", cursive',
           },
           '.ui.accordion .active.content': {
             paddingLeft: '36px !important',
