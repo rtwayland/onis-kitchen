@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import Login from './Login';
+import Login from '../pages/Login';
 import AppliedRoute from './AppliedRoute';
-import Home from './Home';
-import Signup from './Signup';
-import NewRecipeForm from './NewRecipe';
-import Recipe from './Recipe';
+import Home from '../pages/Home';
+import Signup from '../pages/Signup';
+import NewRecipeForm from '../pages/NewRecipe';
+import Recipe from '../pages/Recipe';
 import AllRecipes from '../pages/AllRecipes';
 import FavoriteRecipes from '../pages/FavoriteRecipes';
 

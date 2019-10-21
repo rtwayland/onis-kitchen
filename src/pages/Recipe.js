@@ -9,8 +9,8 @@ import {
   updateUserRecipeData,
   getRecipeImages,
 } from '../utils/api';
-import ImageViewer from './ImageViewer';
-import DimmedLoader from './DimmedLoader';
+import ImageViewer from '../components/ImageViewer';
+import DimmedLoader from '../components/DimmedLoader';
 
 const Recipe = ({ match }) => {
   const [recipe, setRecipe] = useState(null);
