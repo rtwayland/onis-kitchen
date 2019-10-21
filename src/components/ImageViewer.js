@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Global } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Icon } from 'semantic-ui-react';
 
@@ -28,21 +29,20 @@ const ImageViewer = ({ image, minimized, onExpand, onMinimize }) => {
   };
 
   return (
-    <ImgContainer
-      ref={viewer}
-      key={image}
-      expanded={expanded}
-      minimized={minimized}
-    >
-      <Expand onClick={handleExpand}>
-        <Icon
-          name={expanded ? 'window minimize' : 'expand'}
-          size="big"
-          inverted
-        />
-      </Expand>
-      <img src={image} alt="recipe" />
-    </ImgContainer>
+    <>
+      <Global styles={{ 'i.icon': { margin: 0 } }} />
+      <ImgContainer
+        ref={viewer}
+        key={image}
+        expanded={expanded}
+        minimized={minimized}
+      >
+        <Expand onClick={handleExpand}>
+          <Icon name={expanded ? 'minus' : 'expand'} size="big" />
+        </Expand>
+        <img src={image} alt="recipe" />
+      </ImgContainer>
+    </>
   );
 };
 
@@ -56,6 +56,14 @@ const Expand = styled.div({
   top: 5,
   right: 5,
   cursor: 'pointer',
+  backgroundColor: 'rgba(220, 220, 220, 0.7)',
+  borderRadius: 5,
+  '&:hover': {
+    width: 40,
+    height: 40,
+    top: 3,
+    right: 3,
+  },
 });
 
 const ImgContainer = styled.div(
