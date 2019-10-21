@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Input, List } from 'semantic-ui-react';
 import { searchRecipes } from '../utils/api';
+import DimmedLoader from '../components/DimmedLoader';
 
 const debounceSearch = _.debounce(
   (text, callback) => {
@@ -16,47 +17,59 @@ const debounceSearch = _.debounce(
 const Home = ({ isAuthenticated }) => {
   const [list, setList] = useState([]);
   const [searchVal, setSearchVal] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   const searchApi = async (text) => {
     if (text) {
       const recipes = await searchRecipes(text);
       setList(recipes);
+      setIsSearching(false);
     }
   };
 
   const handleSearch = (event) => {
     const { value } = event.target;
     setSearchVal(value);
-    debounceSearch(searchVal, searchApi);
+    setIsSearching(true);
+    debounceSearch(value, searchApi);
   };
 
   return (
     <div>
       {isAuthenticated ? (
         <>
+          <h1 className="handwriting">Search Recipes</h1>
           <Input
             fluid
             size="huge"
             icon="search"
             iconPosition="left"
             id="search"
-            placeholder="Search recipe names"
+            placeholder="Recipe name"
             value={searchVal}
             onChange={handleSearch}
           />
-          <List divided relaxed>
-            {list.map((item) => (
-              <List.Item key={item.id}>
-                <List.Content>
-                  <List.Header>
-                    <Link to={`/recipes/${item.id}`}>{item.name}</Link> —{' '}
-                    {item.category}
-                  </List.Header>
-                  {/* <List.Description>Tags: </List.Description> */}
-                </List.Content>
-              </List.Item>
-            ))}
-          </List>
+          <DimmedLoader
+            loadingText="Searching Recipes"
+            isActive={isSearching && !!searchVal}
+            fillSpace={list.length < 1}
+          >
+            <div style={{ marginTop: 30 }} />
+            <List divided relaxed>
+              {list.map((item) => (
+                <List.Item key={item.id}>
+                  <List.Content>
+                    <List.Header>
+                      <Link to={`/recipes/${item.id}`}>{item.name}</Link> —{' '}
+                      {item.category}
+                    </List.Header>
+                    {/* <List.Description>Tags: </List.Description> */}
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
+            <div style={{ marginTop: 30 }} />
+          </DimmedLoader>
         </>
       ) : (
         <Container>
