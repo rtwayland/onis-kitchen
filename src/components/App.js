@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { Container } from 'semantic-ui-react';
+import { hot } from 'react-hot-loader';
 import Nav from './Nav';
 import Routes from './Routes';
 
@@ -18,7 +19,7 @@ const App = ({ history }) => {
       userHasAuthenticated(true);
     } catch (e) {
       if (e !== 'No current user') {
-        console.log(e);
+        userHasAuthenticated(false);
       }
     }
 
@@ -41,4 +42,4 @@ const App = ({ history }) => {
   );
 };
 
-export default withRouter(App);
+export default hot(module)(withRouter(App));
