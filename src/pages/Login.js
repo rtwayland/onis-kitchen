@@ -33,6 +33,7 @@ const Login = ({ userHasAuthenticated, history, location }) => {
 
   return (
     <div style={{ width: 300, margin: 'auto' }}>
+      <h1 className="handwriting">Welcome back!</h1>
       <Form loading={isLoading} onSubmit={handleSubmit}>
         <Form.Input
           autoFocus

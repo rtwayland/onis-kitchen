@@ -126,6 +126,7 @@ const Signup = ({ userHasAuthenticated, history }) => {
 
   return (
     <div style={{ width: 300, margin: 'auto' }}>
+      <h1 className="handwriting">Welcome!</h1>
       {newUser === null ? renderForm() : renderConfirmationForm()}
       {errorMessage && <Message error content={errorMessage} />}
     </div>
