@@ -60,7 +60,9 @@ const Home = ({ isAuthenticated }) => {
         </>
       ) : (
         <Container>
-          <h1 className="handwriting">Welcome to Oni&apos;s Kitchen</h1>
+          <Welcome className="handwriting">
+            Welcome to Oni&apos;s Kitchen
+          </Welcome>
         </Container>
       )}
     </div>
@@ -78,6 +80,10 @@ const Container = styled.div({
   width: '100%',
   zIndex: -1,
   textAlign: 'center',
+});
+
+const Welcome = styled.h1({
+  fontSize: '3.5rem',
 });
 
 export default Home;
