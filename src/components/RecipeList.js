@@ -1,5 +1,5 @@
 import React from 'react';
-import { Global } from '@emotion/core';
+import { Global } from '@emotion/react';
 import { Accordion, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';

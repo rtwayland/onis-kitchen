@@ -14,16 +14,12 @@ const Signup = ({ userHasAuthenticated, history }) => {
     confirmationCode: '',
   });
 
-  const validateForm = () => {
-    return (
-      fields.email.length > 0 &&
-      fields.password.length > 0 &&
-      fields.password === fields.confirmPassword
-    );
-  };
-  const validateConfirmationForm = () => {
-    return fields.confirmationCode.length > 0;
-  };
+  const validateForm = () =>
+    fields.email.length > 0 &&
+    fields.password.length > 0 &&
+    fields.password === fields.confirmPassword;
+
+  const validateConfirmationForm = () => fields.confirmationCode.length > 0;
 
   const handleConfirmationSubmit = async (event) => {
     event.preventDefault();
@@ -67,62 +63,58 @@ const Signup = ({ userHasAuthenticated, history }) => {
       setIsLoading(false);
     }
   };
-  const renderConfirmationForm = () => {
-    return (
-      <Form loading={isLoading} onSubmit={handleConfirmationSubmit}>
-        <Form.Input
-          autoFocus
-          type="tel"
-          id="confirmationCode"
-          label="Confirmation Code"
-          onChange={handleFieldChange}
-          value={fields.confirmationCode}
-        />
-        <Message
-          header="Verify Email"
-          content="Please check your email for the code."
-        />
-        <Button type="submit" disabled={!validateConfirmationForm()}>
-          Verify
-        </Button>
-      </Form>
-    );
-  };
+  const renderConfirmationForm = () => (
+    <Form loading={isLoading} onSubmit={handleConfirmationSubmit}>
+      <Form.Input
+        autoFocus
+        type="tel"
+        id="confirmationCode"
+        label="Confirmation Code"
+        onChange={handleFieldChange}
+        value={fields.confirmationCode}
+      />
+      <Message
+        header="Verify Email"
+        content="Please check your email for the code."
+      />
+      <Button type="submit" disabled={!validateConfirmationForm()}>
+        Verify
+      </Button>
+    </Form>
+  );
 
-  const renderForm = () => {
-    return (
-      <Form loading={isLoading} onSubmit={handleSubmit}>
-        <Form.Input
-          autoFocus
-          type="email"
-          id="email"
-          label="Email"
-          placeholder="Email"
-          value={fields.email}
-          onChange={handleFieldChange}
-        />
-        <Form.Input
-          type="password"
-          id="password"
-          label="Password"
-          placeholder="Password"
-          value={fields.password}
-          onChange={handleFieldChange}
-        />
-        <Form.Input
-          type="password"
-          id="confirmPassword"
-          label="Confirm Password"
-          placeholder="Confirm Password"
-          value={fields.confirmPassword}
-          onChange={handleFieldChange}
-        />
-        <Button type="submit" disabled={!validateForm()}>
-          Signup
-        </Button>
-      </Form>
-    );
-  };
+  const renderForm = () => (
+    <Form loading={isLoading} onSubmit={handleSubmit}>
+      <Form.Input
+        autoFocus
+        type="email"
+        id="email"
+        label="Email"
+        placeholder="Email"
+        value={fields.email}
+        onChange={handleFieldChange}
+      />
+      <Form.Input
+        type="password"
+        id="password"
+        label="Password"
+        placeholder="Password"
+        value={fields.password}
+        onChange={handleFieldChange}
+      />
+      <Form.Input
+        type="password"
+        id="confirmPassword"
+        label="Confirm Password"
+        placeholder="Confirm Password"
+        value={fields.confirmPassword}
+        onChange={handleFieldChange}
+      />
+      <Button type="submit" disabled={!validateForm()}>
+        Signup
+      </Button>
+    </Form>
+  );
 
   return (
     <div style={{ width: 300, margin: 'auto' }}>

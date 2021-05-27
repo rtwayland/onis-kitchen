@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { Container } from 'semantic-ui-react';
-import { hot } from 'react-hot-loader';
 import Nav from './Nav';
 import Routes from './Routes';
 
@@ -42,4 +41,4 @@ const App = ({ history }) => {
   );
 };
 
-export default hot(module)(withRouter(App));
+export default withRouter(App);

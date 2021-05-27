@@ -34,11 +34,10 @@ const NewRecipeForm = () => {
     setFiles(null);
   };
 
-  const createRecipe = (recipe) => {
-    return API.post('recipes', '/recipes', {
+  const createRecipe = (recipe) =>
+    API.post('recipes', '/recipes', {
       body: recipe,
     });
-  };
 
   const handleImages = () => {
     const images = Promise.all(files.map((file) => s3Upload(file)));

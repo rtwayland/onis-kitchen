@@ -1,16 +1,14 @@
 import React from 'react';
-import { Global } from '@emotion/core';
+import { Global } from '@emotion/react';
 
-const GlobalStyles = () => {
-  return (
-    <Global
-      styles={{
-        '.handwriting': {
-          fontFamily: '"Homemade Apple", cursive',
-        },
-      }}
-    />
-  );
-};
+const GlobalStyles = () => (
+  <Global
+    styles={{
+      '.handwriting': {
+        fontFamily: '"Homemade Apple", cursive',
+      },
+    }}
+  />
+);
 
 export default GlobalStyles;

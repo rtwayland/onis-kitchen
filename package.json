@@ -3,36 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^5.5.0",
-    "@emotion/core": "^10.0.21",
-    "@emotion/styled": "^10.0.17",
-    "@hot-loader/react-dom": "^16.10.2",
+    "@craco/craco": "^6.1.2",
+    "@emotion/react": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
     "aws-amplify": "^1.1.40",
     "husky": "^3.0.8",
     "lint-staged": "^9.4.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "pretty-quick": "^1.11.1",
-    "react": "^16.10.1",
-    "react-dom": "^16.10.1",
-    "react-hot-loader": "^4.12.15",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.1.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.1"
+    "semantic-ui-react": "^2.0.3"
   },
   "devDependencies": {
-    "babel-plugin-emotion": "^10.0.21",
-    "babel-preset-react-app": "^9.0.2",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.4.0",
-    "npm-check": "^5.9.0",
-    "prettier": "^1.18.2"
+    "babel-plugin-emotion": "^11.0.0",
+    "babel-preset-react-app": "^10.0.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "npm-check": "^5.9.2",
+    "prettier": "^2.3.0"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "upgrade-interactive": "npm-check --update"
   },
   "lint-staged": {
     "*.{js,jsx}": [
